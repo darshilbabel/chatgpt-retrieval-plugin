@@ -31,7 +31,7 @@ pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMENT)
 # Set the batch size for upserting vectors to Pinecone
 UPSERT_BATCH_SIZE = 100
 
-EMBEDDING_DIMENSION = int(os.environ.get("EMBEDDING_DIMENSION", 256))
+EMBEDDING_DIMENSION = int(os.environ.get("EMBEDDING_DIMENSION", 1536))
 
 
 class PineconeDataStore(DataStore):
