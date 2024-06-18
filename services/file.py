@@ -22,6 +22,16 @@ async def get_document_from_file(
     return doc
 
 
+async def get_document_from_file_with_id(
+    id: str, file: UploadFile, metadata: DocumentMetadata
+) -> Document:
+    extracted_text = await extract_text_from_form_file(file)
+
+    doc = Document(id=id, text=extracted_text, metadata=metadata)
+
+    return doc
+
+
 def extract_text_from_filepath(filepath: str, mimetype: Optional[str] = None) -> str:
     """Return the text content of a file given its filepath."""
 
@@ -66,6 +76,7 @@ def extract_text_from_file(file: BufferedReader, mimetype: str) -> str:
         reader = csv.reader(decoded_buffer)
         for row in reader:
             extracted_text += " ".join(row) + "\n"
+        print(extracted_text)
     elif (
         mimetype
         == "application/vnd.openxmlformats-officedocument.presentationml.presentation"

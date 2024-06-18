@@ -1,3 +1,4 @@
+import json
 import os
 from typing import Optional
 import uvicorn
@@ -15,7 +16,7 @@ from models.api import (
     UpsertResponse,
 )
 from datastore.factory import get_datastore
-from services.file import get_document_from_file
+from services.file import get_document_from_file, get_document_from_file_with_id
 
 from models.models import DocumentMetadata, Source
 
@@ -61,7 +62,13 @@ async def upsert_file(
     except:
         metadata_obj = DocumentMetadata(source=Source.file)
 
-    document = await get_document_from_file(file, metadata_obj)
+    metadata_json = json.loads(metadata)
+    print(metadata_json)
+    id = metadata_json['id'] if 'id' in metadata_json else None
+    if id is not None:
+        document = await get_document_from_file_with_id(id, file, metadata_obj)
+    else:
+        document = await get_document_from_file(file, metadata_obj)
 
     try:
         ids = await datastore.upsert([document])
